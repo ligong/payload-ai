@@ -1,8 +1,10 @@
 import { anthropic } from '@ai-sdk/anthropic'
+import { google } from '@ai-sdk/google';
 import { generateText } from 'ai'
 
-import { PLUGIN_DEFAULT_ANTHROPIC_MODEL, PLUGIN_DEFAULT_OPENAI_MODEL } from '../../defaults.js'
+import { PLUGIN_DEFAULT_ANTHROPIC_MODEL, PLUGIN_DEFAULT_GEMINI_MODEL, PLUGIN_DEFAULT_OPENAI_MODEL } from '../../defaults.js'
 import { openai } from '../models/openai/openai.js'
+
 
 export const systemGenerate = async (
   data: { prompt: string; system: string },
@@ -21,8 +23,10 @@ export const systemGenerate = async (
     model = openai(PLUGIN_DEFAULT_OPENAI_MODEL)
   } else if (process.env.ANTHROPIC_API_KEY) {
     model = anthropic(PLUGIN_DEFAULT_ANTHROPIC_MODEL)
+  } else if (process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
+    model = google(PLUGIN_DEFAULT_GEMINI_MODEL)
   } else {
-    throw new Error('- AI Plugin: Please check your environment variables!')
+    throw new Error('- AI Plugin: Please check your environment variables! google: ' + process.env.GOOGLE_GENERATIVE_AI_API_KEY)
   }
 
   const { text } = await generateText({

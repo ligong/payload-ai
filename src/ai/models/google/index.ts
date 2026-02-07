@@ -1,5 +1,11 @@
 import type { File } from 'payload'
-import { google } from '@ai-sdk/google'
+
+import {
+  createGoogleGenerativeAI,
+  google as googleDefault,
+  type GoogleGenerativeAIProvider,
+} from '@ai-sdk/google'
+import { ProxyAgent } from 'undici'
 
 import type { GenerationConfig } from '../../../types.js'
 
@@ -7,6 +13,19 @@ import { defaultSystemPrompt } from '../../prompts.js'
 import { generateFileNameByPrompt } from '../../utils/generateFileNameByPrompt.js'
 import { generateObject } from '../generateObject.js'
 import { generateImage } from './generateImage.js'
+
+let google: GoogleGenerativeAIProvider
+
+if (process.env.http_proxy) {
+  const proxyUrl = process.env.http_proxy 
+  const client = new ProxyAgent(proxyUrl)
+
+  google = createGoogleGenerativeAI({
+    fetch: (input, init) => fetch(input, { ...init, dispatcher: client } as any),
+  })
+} else {
+  google = googleDefault
+}
 
 const MODEL_KEY = 'GEMINI'
 const MODELS = [

@@ -11,3 +11,4 @@ export const PLUGIN_FETCH_FIELDS_ENDPOINT = `${PLUGIN_API_ENDPOINT_BASE}/fetch-f
 // LLM Settings
 export const PLUGIN_DEFAULT_OPENAI_MODEL = `gpt-4o-mini`
 export const PLUGIN_DEFAULT_ANTHROPIC_MODEL = `claude-3-5-sonnet-latest`
+export const PLUGIN_DEFAULT_GEMINI_MODEL = 'gemini-3-pro-preview'
